@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["es6", "esnext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "outDir": "dist",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "files": [
+    "src/index.ts"
+  ],
+  "include": [
+    "**/*.graphql"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
