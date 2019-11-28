@@ -3,6 +3,7 @@ import { GraphQLCustomContext } from './index.d';
 import { buildFederatedSchema } from '@apollo/federation';
 import { ApolloServer } from 'apollo-server';
 import { schema } from './graphql';
+import { handleGraphQLContext } from './auth';
 import signale from 'signale';
 
 const initializeServer = async () => {
@@ -14,13 +15,7 @@ const initializeServer = async () => {
       endpoint: '/graphql',
     },
     introspection: true,
-    context: ({ req: { headers } }): GraphQLCustomContext => {
-      // console.log(headers);
-      console.log('passing through...');
-      return {
-        db: database,
-      };
-    },
+    context: handleGraphQLContext,
   });
 
   await server.listen(3000, (err: Error) => {
