@@ -1,6 +1,7 @@
-import { resolvers } from './resolvers'
-import { gql } from 'apollo-server'
-import path from 'path'
+import { resolvers } from './resolvers';
+import { gql } from 'apollo-server';
+import path from 'path';
+
 import { mergeTypes, fileLoader } from 'merge-graphql-schemas'
 
 const typeDefs = fileLoader(path.join(__dirname, './schema'))

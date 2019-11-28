@@ -1,9 +1,12 @@
-import { buildFederatedSchema } from '@apollo/federation'
-import { ApolloServer } from 'apollo-server'
-import { schema } from './graphql'
+import { database } from './db';
+import { GraphQLCustomContext } from './index.d';
+import { buildFederatedSchema } from '@apollo/federation';
+import { ApolloServer } from 'apollo-server';
+import { schema } from './graphql';
+import signale from 'signale';
 
 const initializeServer = async () => {
-  const federatedSchema = buildFederatedSchema([schema])
+  const federatedSchema = buildFederatedSchema([schema]);
 
   const server = new ApolloServer({
     schema: federatedSchema,
@@ -11,21 +14,22 @@ const initializeServer = async () => {
       endpoint: '/graphql',
     },
     introspection: true,
-    context: async ({ req: { headers } }) => {
-      console.log(headers)
-      return headers
+    context: ({ req: { headers } }): GraphQLCustomContext => {
+      console.log(headers);
+      return {
+        db: database,
+      };
     },
-  })
+  });
 
   await server.listen(3000, (err: Error) => {
     if (err) {
-      console.log(err.message)
+      signale.error(err.message);
     }
+    signale.info('server started....');
+  });
 
-    console.log('server started....')
-  })
+  return server;
+};
 
-  return server
-}
-
-initializeServer().catch(err => console.error(err.message))
+initializeServer().catch(err => console.error(err.message));
