@@ -1,37 +1,20 @@
-import lowdb = require('lowdb');
-import FileSync = require('lowdb/adapters/FileSync');
+import lowdb from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
 const shortid = require('shortid');
 
 const adapter = new FileSync('./db.json');
 const db = lowdb(adapter);
+
+db.defaults({
+  users: [],
+}).write();
 
 interface UserData {
   id?: number;
   email: string;
 }
 
-// Set defaults
-const initDb = () => {
-  return db.defaults({ users: [] }).write();
-};
-
-const create = (userData: UserData) => {
-  const newUserId = db
-    .get('users')
-    .push({ id: shortid.generate(), email: userData.email })
-    .write().id;
-
-  console.log('id ' + newUserId)
-  const result = db
-    .get('users')
-    .find({ id: newUserId })
-    .value();
-
-  console.log(result);
-  return result;
-};
-
-const findById = (id: string) => {
+const fetchById = async (id: string): Promise<any> => {
   const user = db
     .get('users')
     .find({ id })
@@ -39,25 +22,49 @@ const findById = (id: string) => {
   return user;
 };
 
-const upsertUser = (data: UserData) => {
+const fetchUserByEmail = async (input: any): Promise<any> => {
+  const { email } = input;
+
   const user = db
     .get('users')
-    .find({ id: data.id })
+    .find({ email })
     .value();
-  if (!user) {
-    db.get('users')
-      .push(data)
-      .write();
-    return data;
-  } else {
-    db.update({ id: data.id }).write();
-    return data;
+  return user;
+};
+
+export const getUserByToken = async (token: string): Promise<any> => {
+  const user = db
+    .get('users')
+    .find({ token })
+    .value();
+  return user;
+};
+
+const createUser = async (email: string) => {
+  const existingUser = db
+    .get('users')
+    .find({ email })
+    .value();
+
+  if (existingUser) {
+    throw new Error('user already exist');
   }
+
+  const id = shortid.generate();
+
+  const user = {
+    email,
+    id,
+  };
+
+  db.get('users')
+    .push(user)
+    .write();
+  return user;
 };
 
 export const database = {
-  create,
-  findById,
-  initDb,
-  upsertUser,
+  createUser,
+  fetchById,
+  fetchUserByEmail,
 };

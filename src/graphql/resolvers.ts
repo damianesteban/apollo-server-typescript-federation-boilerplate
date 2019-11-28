@@ -1,3 +1,4 @@
+import { database } from './../db';
 import { GraphQLCustomContext } from './../index.d';
 import {
   Resolvers,
@@ -13,7 +14,7 @@ export const resolvers: Resolvers = {
       args: QueryUserArgs,
       context: GraphQLCustomContext,
     ): Promise<User> => {
-      const user = context.db.findById(args.id);
+      const user = database.fetchById(args.id);
       return Promise.resolve(user);
     },
   },
@@ -23,7 +24,7 @@ export const resolvers: Resolvers = {
       args: MutationCreateUserArgs,
       context: GraphQLCustomContext,
     ): Promise<User> => {
-      const user = context.db.create({ email: args.email });
+      const user = context.db.createUser(args.email);
       return Promise.resolve(user);
     },
   },
