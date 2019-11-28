@@ -29,15 +29,6 @@ export function handleGraphQLContext(ctx: {
   return createContext(token as string);
 }
 
-// handle authentication for socket connections
-export function handleGraphQLSubscriptionContext(
-  connectionParams: { authToken: string },
-  webSocket: WebSocket,
-) {
-  const token = connectionParams.authToken;
-  return createContext(token);
-}
-
 // check if the user is logged in or whatever you want to do to authenticate the user
 export async function authenticateContext(context: Context): Promise<any> {
   if (!context.token) {

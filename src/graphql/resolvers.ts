@@ -24,7 +24,7 @@ export const resolvers: Resolvers = {
       args: MutationCreateUserArgs,
       context: GraphQLCustomContext,
     ): Promise<User> => {
-      const user = context.db.createUser(args.email);
+      const user = database.createUser(args.email);
       return Promise.resolve(user);
     },
   },

@@ -16,6 +16,10 @@ const initializeServer = async () => {
     },
     introspection: true,
     context: handleGraphQLContext,
+    formatError: (err: any) => {
+      signale.error(err);
+      return err;
+    },
   });
 
   await server.listen(3000, (err: Error) => {
