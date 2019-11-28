@@ -16,18 +16,25 @@ const initDb = () => {
 };
 
 const create = (userData: UserData) => {
-  const newUser = db
+  const newUserId = db
     .get('users')
     .push({ id: shortid.generate(), email: userData.email })
-    .write();
+    .write().id;
 
-  return newUser;
+  console.log('id ' + newUserId)
+  const result = db
+    .get('users')
+    .find({ id: newUserId })
+    .value();
+
+  console.log(result);
+  return result;
 };
 
-const findByEmail = (email: string) => {
+const findById = (id: string) => {
   const user = db
     .get('users')
-    .find({ email })
+    .find({ id })
     .value();
   return user;
 };
@@ -50,7 +57,7 @@ const upsertUser = (data: UserData) => {
 
 export const database = {
   create,
-  findByEmail,
+  findById,
   initDb,
   upsertUser,
-}
+};

@@ -15,7 +15,8 @@ const initializeServer = async () => {
     },
     introspection: true,
     context: ({ req: { headers } }): GraphQLCustomContext => {
-      console.log(headers);
+      // console.log(headers);
+      console.log('passing through...');
       return {
         db: database,
       };

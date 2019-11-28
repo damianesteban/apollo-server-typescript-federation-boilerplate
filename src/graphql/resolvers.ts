@@ -1,23 +1,30 @@
+import { GraphQLCustomContext } from './../index.d';
 import {
   Resolvers,
   MutationCreateUserArgs,
   QueryUserArgs,
   User,
-} from './generated'
+} from './generated';
 
 export const resolvers: Resolvers = {
   Query: {
-    user: (objs: any, {}, args: QueryUserArgs): Promise<User> => {
-      return Promise.resolve({ id: args.id, email: 'damian.esteban@gmail.com' })
+    user: (
+      objs: null,
+      args: QueryUserArgs,
+      context: GraphQLCustomContext,
+    ): Promise<User> => {
+      const user = context.db.findById(args.id);
+      return Promise.resolve(user);
     },
   },
   Mutation: {
     createUser: (
-      objs: any,
-      {},
+      obj: null,
       args: MutationCreateUserArgs,
+      context: GraphQLCustomContext,
     ): Promise<User> => {
-      return Promise.resolve({ id: '12', email: args.email })
+      const user = context.db.create({ email: args.email });
+      return Promise.resolve(user);
     },
   },
-}
+};
