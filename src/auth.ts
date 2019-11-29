@@ -1,4 +1,5 @@
-import { getUserByToken } from './db';
+import { User } from './graphql/generated';
+import { fetchUserByToken } from './db';
 import { Request, Response } from 'express';
 
 // our context interface
@@ -20,26 +21,28 @@ export function handleGraphQLContext(ctx: {
   res?: Response;
 }) {
   const { req, connection } = ctx;
-  // we already connected with a subscription
+
+  // Already connected with a subscription
   if (connection) {
     return connection.context;
   }
-  // check the request for the token
+
+  // Check the request for the token
   const token = req.headers && req.headers.token;
   return createContext(token as string);
 }
 
-// check if the user is logged in or whatever you want to do to authenticate the user
-export async function authenticateContext(context: Context): Promise<any> {
+// Check if the user is logged in or whatever you want to do to authenticate the user
+export async function authenticateContext(context: Context): Promise<User> {
   if (!context.token) {
-    // too bad 👎
+    // Boo hoo 👎
     throw new Error('user is not logged in');
   }
-  const user = await getUserByToken(context.token);
+  const user = await fetchUserByToken(context.token);
   if (!user) {
-    // too bad 👎
+    // Boo hoo 👎
     throw new Error('invalid token');
   }
-  // yay 👍
+  // Sweet 👍
   return user;
 }

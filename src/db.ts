@@ -10,11 +10,6 @@ db.defaults({
   users: [],
 }).write();
 
-interface UserData {
-  id?: number;
-  email: string;
-}
-
 const fetchById = async (id: string): Promise<User> => {
   const user = db
     .get('users')
@@ -23,9 +18,7 @@ const fetchById = async (id: string): Promise<User> => {
   return user as User;
 };
 
-const fetchUserByEmail = async (input: any): Promise<User> => {
-  const { email } = input;
-
+const fetchUserByEmail = async (email: string): Promise<User> => {
   const user = db
     .get('users')
     .find({ email })
@@ -33,7 +26,7 @@ const fetchUserByEmail = async (input: any): Promise<User> => {
   return user as User;
 };
 
-export const getUserByToken = async (token: string): Promise<User> => {
+export const fetchUserByToken = async (token: string): Promise<User> => {
   const user = db
     .get('users')
     .find({ token })
