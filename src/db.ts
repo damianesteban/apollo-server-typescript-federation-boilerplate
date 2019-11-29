@@ -1,3 +1,4 @@
+import { User } from './graphql/generated';
 import lowdb from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 const shortid = require('shortid');
@@ -14,33 +15,33 @@ interface UserData {
   email: string;
 }
 
-const fetchById = async (id: string): Promise<any> => {
+const fetchById = async (id: string): Promise<User> => {
   const user = db
     .get('users')
     .find({ id })
     .value();
-  return user;
+  return user as User;
 };
 
-const fetchUserByEmail = async (input: any): Promise<any> => {
+const fetchUserByEmail = async (input: any): Promise<User> => {
   const { email } = input;
 
   const user = db
     .get('users')
     .find({ email })
     .value();
-  return user;
+  return user as User;
 };
 
-export const getUserByToken = async (token: string): Promise<any> => {
+export const getUserByToken = async (token: string): Promise<User> => {
   const user = db
     .get('users')
     .find({ token })
     .value();
-  return user;
+  return user as User;
 };
 
-const createUser = async (email: string) => {
+const createUser = async (email: string): Promise<User> => {
   const existingUser = db
     .get('users')
     .find({ email })
@@ -60,7 +61,7 @@ const createUser = async (email: string) => {
   db.get('users')
     .push(user)
     .write();
-  return user;
+  return user as User;
 };
 
 export const database = {
