@@ -1,5 +1,3 @@
-import { database } from './db';
-import { GraphQLCustomContext } from './index.d';
 import { buildFederatedSchema } from '@apollo/federation';
 import { ApolloServer } from 'apollo-server';
 import { schema } from './graphql';

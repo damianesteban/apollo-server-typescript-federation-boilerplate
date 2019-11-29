@@ -22,19 +22,23 @@
     "pretty-quick": "^2.0.0",
     "rimraf": "^3.0.0",
     "ts-node": "^8.4.1",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.2"
   },
   "dependencies": {
     "@apollo/federation": "^0.11.2",
     "apollo-server": "^2.9.12",
     "graphql": "^14.5.8",
-    "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
     "merge-graphql-schemas": "^1.7.3",
     "shortid": "^2.2.15",
     "signale": "^1.4.0"
   },
   "scripts": {
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
+    "dev:debug": "ts-node-dev --inspect=4321 --respawn --transpileOnly src/index.ts",
+    "compile": "rimraf dist && tsc",
+    "start": "node dist/index.js"
   }
 }
