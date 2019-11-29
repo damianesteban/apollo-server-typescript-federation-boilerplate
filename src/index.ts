@@ -3,8 +3,9 @@ import { ApolloServer } from 'apollo-server';
 import { schema } from './graphql';
 import { handleGraphQLContext } from './auth';
 import signale from 'signale';
+import { GraphQLFormattedError, GraphQLError } from 'graphql';
 
-const initializeServer = async () => {
+const initializeServer = async (): Promise<ApolloServer> => {
   const federatedSchema = buildFederatedSchema([schema]);
 
   const server = new ApolloServer({
@@ -14,7 +15,9 @@ const initializeServer = async () => {
     },
     introspection: true,
     context: handleGraphQLContext,
-    formatError: (err: any) => {
+    formatError: (
+      err: GraphQLError,
+    ): GraphQLFormattedError<Record<string, any>> => {
       signale.error(err);
       return err;
     },
