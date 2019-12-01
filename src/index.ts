@@ -23,7 +23,7 @@ const initializeServer = async (): Promise<ApolloServer> => {
     },
   });
 
-  await server.listen(3000, (err: Error) => {
+  await server.listen(4001, (err: Error) => {
     if (err) {
       signale.error(err.message);
     }
@@ -33,4 +33,4 @@ const initializeServer = async (): Promise<ApolloServer> => {
   return server;
 };
 
-initializeServer().catch(err => console.error(err.message));
+initializeServer().catch(err => signale.error(err.message));
